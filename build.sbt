@@ -9,8 +9,10 @@ lazy val server = (project in file("server")).settings(
   pipelineStages  := Seq(scalaJSProd, gzip),
   resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases",
   libraryDependencies ++= Seq(
-    "com.vmunier" %% "play-scalajs-scripts" % "0.3.0",
-    "org.webjars" % "jquery" % "1.11.1",
+    "com.vmunier"                %% "play-scalajs-scripts" % "0.3.0",
+    "org.webjars"                %  "jquery"               % "1.11.1",
+    "org.monifu"                 %% "monifu"               % "1.0-RC4",
+    "com.typesafe.scala-logging" %% "scala-logging"        % "3.1.0",
     specs2 % Test
   )
 ).enablePlugins(PlayScala).
@@ -18,11 +20,13 @@ lazy val server = (project in file("server")).settings(
   dependsOn(sharedJvm)
 
 lazy val client = (project in file("client")).settings(
-  scalaVersion    := scalaV,
-  persistLauncher := true,
+  scalaVersion            := scalaV,
+  persistLauncher         := true,
   persistLauncher in Test := false,
+  sourceMapsDirectories += sharedJs.base / "..",
   libraryDependencies ++= Seq(
-    "org.scala-js" %%% "scalajs-dom" % "0.8.0"
+    "org.scala-js" %%% "scalajs-dom" % "0.8.0",
+    "org.monifu"   %%% "monifu"      % "1.0-RC2"
   )
 ).enablePlugins(
     ScalaJSPlugin,
@@ -31,7 +35,8 @@ lazy val client = (project in file("client")).settings(
 
 lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared")).
   settings(scalaVersion := scalaV).
-  jsConfigure(_ enablePlugins ScalaJSPlay)
+  jsConfigure(_ enablePlugins ScalaJSPlay).
+  jsSettings(sourceMapsBase := baseDirectory.value / "..")
 
 lazy val sharedJvm = shared.jvm
 lazy val sharedJs  = shared.js
