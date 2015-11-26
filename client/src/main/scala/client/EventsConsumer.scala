@@ -42,8 +42,7 @@ object EventsConsumer {
         case "error" =>
           val errorType = json.`type`.asInstanceOf[String]
           val message   = json.message.asInstanceOf[String]
-          throw new BackPressuredWSClient.Exception(
-            s"Server-side error throw - $errorType: $message")
+          throw new BackPressuredWSClient.Exception(s"Server-side error throw - $errorType: $message")
         case _ =>
           None
       }

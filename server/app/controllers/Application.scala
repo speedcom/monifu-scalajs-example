@@ -10,7 +10,7 @@ import monifu.concurrent.Implicits.globalScheduler
 object Application extends Controller with JSONFormats {
 
   def index = Action {
-    Ok(views.html.index("app"))
+    Ok(views.html.index())
   }
 
   def backPressuredStream(periodMillis: Int, seed: Long) =
