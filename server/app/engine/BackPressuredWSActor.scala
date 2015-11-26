@@ -27,7 +27,7 @@ class BackPressuredWSActor[T <: Event : json.Writes](signalProducer: Observable[
   override def preStart() {
     super.preStart()
 
-    val dataSource = {
+    val dataSource: Observable[JsValue] = {
       val initSignal        = Observable.unit(initMsg(now()))
       val continuousSignals = signalProducer.map(Json.toJson(_))
       val obs               = initSignal ++ continuousSignals
