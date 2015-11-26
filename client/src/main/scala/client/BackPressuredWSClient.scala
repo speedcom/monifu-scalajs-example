@@ -40,7 +40,7 @@ class BackPressuredWSClient private (url: String) extends Observable[String] { s
           }
         })
       }
-    }
+  }
 
 }
 
@@ -52,8 +52,8 @@ object BackPressuredWSClient {
 
 object WSHelper {
 
-  def initObsChannel(ws: WebSocket) =
-    Observable.create[String] { subscriber =>
+  def initObsChannel(ws: WebSocket) = Observable.create[String] {
+    subscriber =>
       import subscriber.scheduler
 
       val downstream  = Observer.toReactiveSubscriber(subscriber)
