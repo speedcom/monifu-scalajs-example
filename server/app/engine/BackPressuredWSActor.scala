@@ -2,8 +2,9 @@ package engine
 
 import akka.actor.{Props, ActorRef, Actor}
 import com.typesafe.scalalogging.LazyLogging
+import play.api.libs.json
+import play.api.libs.json.{JsObject, JsValue, Json}
 import shared.Event
-import play.api.libs.json.{Writes, JsObject, JsValue, Json}
 import scala.concurrent.duration._
 import monifu.concurrent.Scheduler
 import monifu.reactive.Observable
@@ -11,7 +12,7 @@ import monifu.reactive.OverflowStrategy.DropOld
 import monifu.reactive.streams.SingleAssignmentSubscription
 import org.reactivestreams.{Subscriber, Subscription}
 
-class BackPressuredWSActor[T <: Event : Writes](dataProducer: Observable[T], out: ActorRef)
+class BackPressuredWSActor[T <: Event : json.Writes](dataProducer: Observable[T], out: ActorRef)
   extends Actor
   with LazyLogging {
 
@@ -24,7 +25,7 @@ class BackPressuredWSActor[T <: Event : Writes](dataProducer: Observable[T], out
 
 object BackPressuredWSActor {
 
-  def props[T <: Event : Writes](dataProducer: Observable[T], out: ActorRef) =
+  def props[T <: Event : json.Writes](dataProducer: Observable[T], out: ActorRef) =
     Props(new BackPressuredWSActor(dataProducer, out))
 
   object Request {
