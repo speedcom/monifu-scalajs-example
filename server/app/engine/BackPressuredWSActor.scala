@@ -90,14 +90,14 @@ object BackPressuredWSActor {
 
   def onComplete = {
     Json.obj(
-      "event"     -> "complete",
+      "name"      -> "complete",
       "timestamp" -> now()
     )
   }
 
   def onError(t: Throwable) = {
     Json.obj(
-      "event"     -> "error",
+      "name"      -> "error",
       "type"      -> t.getClass.getName,
       "message"   -> t.getMessage,
       "timestamp" -> now())
@@ -105,7 +105,7 @@ object BackPressuredWSActor {
 
   def onOverflow(dropped: Long, now: Long) = {
     Json.obj(
-      "event"     -> "overflow",
+      "name"      -> "overflow",
       "dropped"   -> dropped,
       "timestamp" -> now
     )
@@ -113,14 +113,14 @@ object BackPressuredWSActor {
 
   def initMsg(now: Long) = {
     Json.obj(
-      "event"     -> "init",
+      "name"      -> "init",
       "timestamp" -> now
     )
   }
 
   def keepAliveMessage(now: Long) = {
     Json.obj(
-      "event"     -> "keep-alive",
+      "name"      -> "keep-alive",
       "timestamp" -> now
     )
   }
