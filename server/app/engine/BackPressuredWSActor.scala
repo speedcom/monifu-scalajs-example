@@ -44,7 +44,10 @@ class BackPressuredWSActor[T <: Event : json.Writes](signalProducer: Observable[
 
       override def onError(throwable: Throwable): Unit = ???
 
-      override def onComplete(): Unit = ???
+      override def onComplete(): Unit = {
+        out ! onComplete
+        context.stop(self)
+      }
 
       override def onNext(t: JsValue): Unit = ???
     })
@@ -77,6 +80,13 @@ object BackPressuredWSActor {
     }
 
     val IsInteger = """^([-+]?\d+)$""".r
+  }
+
+  def onComplete = {
+    Json.obj(
+      "event" -> "complete",
+      "timestamp" -> now()
+    )
   }
 
   def onOverflow(dropped: Long, now: Long) = {
