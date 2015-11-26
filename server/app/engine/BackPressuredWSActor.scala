@@ -53,7 +53,9 @@ class BackPressuredWSActor[T <: Event : json.Writes](signalProducer: Observable[
         context.stop(self)
       }
 
-      override def onNext(t: JsValue): Unit = ???
+      override def onNext(jsValue: JsValue): Unit = {
+        out ! jsValue
+      }
     })
   }
 }
