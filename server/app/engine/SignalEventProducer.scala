@@ -13,7 +13,7 @@ class SignalEventProducer(interval: FiniteDuration, seed: Long) extends EventPro
     data.subscribe(subscriber)
   }
 
-  val data: Observable[Signal] = Observable.create[Signal] { subscriber =>
+  val data = Observable.create[Signal] { subscriber =>
     import subscriber.{scheduler => s}
 
     val random = Observable
