@@ -42,7 +42,11 @@ class BackPressuredWSActor[T <: Event : json.Writes](signalProducer: Observable[
         subscription := s
       }
 
-      override def onError(throwable: Throwable): Unit = ???
+      override def onError(t: Throwable): Unit = {
+        logger.warn(s"Error while serving a web-socket stream", t)
+        out ! onError(t)
+        context.stop(self)
+      }
 
       override def onComplete(): Unit = {
         out ! onComplete
@@ -84,25 +88,39 @@ object BackPressuredWSActor {
 
   def onComplete = {
     Json.obj(
-      "event" -> "complete",
+      "event"     -> "complete",
       "timestamp" -> now()
     )
   }
 
+  def onError(t: Throwable) = {
+    Json.obj(
+      "event"     -> "error",
+      "type"      -> t.getClass.getName,
+      "message"   -> t.getMessage,
+      "timestamp" -> now())
+  }
+
   def onOverflow(dropped: Long, now: Long) = {
     Json.obj(
-      "event" -> "overflow",
-      "dropped" -> dropped,
+      "event"     -> "overflow",
+      "dropped"   -> dropped,
       "timestamp" -> now
     )
   }
 
   def initMsg(now: Long) = {
-    Json.obj("event" -> "init", "timestamp" -> now)
+    Json.obj(
+      "event"     -> "init",
+      "timestamp" -> now
+    )
   }
 
   def keepAliveMessage(now: Long) = {
-    Json.obj("event" -> "keep-alive", "timestamp" -> now)
+    Json.obj(
+      "event"     -> "keep-alive",
+      "timestamp" -> now
+    )
   }
 
 }
