@@ -6,9 +6,9 @@ trait Event {
 }
 
 case class OverflowEvent(dropped: Long, timestamp: Long) extends Event {
-  override def name: String = "overflow-event"
+  override def name = "overflow-event"
 }
 
 case class Signal(value: Double, timestamp: Long) extends Event {
-  override def name: String = "signal-event"
+  override def name = "signal-event"
 }

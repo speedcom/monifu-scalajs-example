@@ -8,15 +8,15 @@ trait JSONFormats {
 
   implicit val pointFormat = new Format[Signal] {
     def reads(json: JsValue): JsResult[Signal] =
-      (json \ "event").validate[String].flatMap {
-        case "point" =>
+      (json \ "name").validate[String].flatMap {
+        case "signal-event" =>
           defaultPointFormat.reads(json)
         case _ =>
-          JsError(JsPath \ "event", s"Event is not `point`")
+          JsError(JsPath \ "name", s"Event is not `point`")
       }
 
     def writes(o: Signal): JsValue =
-      Json.obj("event" -> o.name) ++
+      Json.obj("name" -> o.name) ++
         defaultPointFormat.writes(o).as[JsObject]
   }
 }
